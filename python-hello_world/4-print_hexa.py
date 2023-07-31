@@ -1,2 +1,2 @@
-for num in range(98):
-   print(f"{num} = {hex(num)}")
+for num in range(99):
+    print(f"{num} = 0x{num:x}")
