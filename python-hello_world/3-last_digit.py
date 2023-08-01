@@ -2,12 +2,10 @@
 import random
 number = random.randint(-10000, 10000)
 last_digit = 0
-
 if number >= 0:
     last_digit =number % 10
 else:
     last_digit =(-number % 10)* -1
-
     massage = f"last digit of {number} is {last_digit}"
     if last_digit == 0:
         print(f"{massage} and is 0")
