@@ -4,12 +4,13 @@ def print_matrix_integer(matrix=[[]]):
         return
 
     for row in matrix:
+        row_str = ""
         for i, num in enumerate(row):
             if i == len(row) - 1:
-                print(num, end="$")
+                row_str += str(num) + "$"
             else:
-                print(num, end=" ")
-        print()
+                row_str += str(num) + " "
+        print(row_str)
 
 # Example usage
 matrix = [
