@@ -3,11 +3,12 @@ def print_matrix_integer(matrix=[[]]):
         print("Matrix is empty")
         return
 
-    max_width = max(len(str(num)) for row in matrix for num in row)
-
     for row in matrix:
-        for num in row:
-            print("{:>{width}}".format(num, width=max_width), end=" ")
+        for i, num in enumerate(row):
+            if i == len(row) - 1:
+                print(num, end="$")
+            else:
+                print(num, end=" ")
         print()
 
 # Example usage
