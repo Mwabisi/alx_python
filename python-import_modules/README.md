@@ -1,1 +1,1 @@
-This readme is about Python - import & modules
+This readme is about Python - import & moduless
