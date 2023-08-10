@@ -1,33 +1,18 @@
 def square_matrix_simple(matrix=[]):
-    rows = len(matrix)
-    cols = len(matrix[0]) if rows > 0 else 0
-    squared_matrix = [[0] * cols for _ in range(rows)]
+  if not isinstance(matrix, list):
+    raise ValueError("matrix must be a 2 dimensional array")
 
-    for i in range(rows):
-        for j in range(cols):
-            squared_matrix[i][j] = matrix[i][j] ** 2
+  if len(matrix) == 0:
+    return []
 
-    return squared_matrix
+  if len(matrix[0]) == 0:
+    return []
 
-input_matrix1 = [
-    [1, 2, 3],
-    [4, 5, 6],
-    [7, 8, 9]
-]
+  new_matrix = []
+  for row in matrix:
+    new_row = []
+    for value in row:
+      new_row.append(value ** 2)
+    new_matrix.append(new_row)
 
-input_matrix2 = [
-    [1, 2, 3],
-    [4, 5, 6],
-    [7, 8, 9]
-]
-
-result_matrix1 = square_matrix_simple(input_matrix1)
-result_matrix2 = square_matrix_simple(input_matrix2)
-
-for row in result_matrix1:
-    print(row)
-    
-print()
-
-for row in result_matrix2:
-    print(row)
+  return new_matrix
