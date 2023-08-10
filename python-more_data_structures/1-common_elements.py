@@ -1,7 +1,8 @@
 #!usr/bin/python3
 def common_elements(set_1, set_2):
-    return list(set_1.intersection(set_2))
+    return list(set_1 & set_2)
 
+# Example usage
 set_1 = {"Python", "C", "Javascript"}
 set_2 = {"Bash", "C", "Ruby", "Perl"}
 
