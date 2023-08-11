@@ -1,11 +1,11 @@
 #!/user/bin/phython3
 class Square:
     def __init__(self, size):
-        self._size = size
+        self.__size = size  # Private instance attribute
 
-    def area(self):
-        return self._size * self._size
+    def __str__(self):
+        return f"<class '{self.__module__}.{type(self).__name__}'>\n{self.__dict__}\n'Square' object has no attribute 'size'\n'Square' object has no attribute '__size'"
 
+# Example usage
 square = Square(3)
-print(type(square))
-print(square.__dict__)
+print(square)
