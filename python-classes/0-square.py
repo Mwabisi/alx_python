@@ -4,12 +4,8 @@ class Square:
         self._size = size
 
     def size(self):
-        return self._size
-
-    def set_size(self, size):
-        self._size = size
-
+        return self._size * self._size
 
 square = Square(3)
-square.set_size(5)
-print(square.size())
+print(type(square))
+print(square.__dict__)
