@@ -1,18 +1,8 @@
+#!/usr/bin/python3
 def square_matrix_simple(matrix=[]):
-  if not isinstance(matrix, list):
-    raise ValueError("matrix must be a 2 dimensional array")
+    new_matrix = matrix.copy()
 
-  if len(matrix) == 0:
-    return []
+    for i in range(len(matrix)):
+        new_matrix[i] = list(map(lambda x: x**2, matrix[i]))
 
-  if len(matrix[0]) == 0:
-    return []
-
-  new_matrix = []
-  for row in matrix:
-    new_row = []
-    for value in row:
-      new_row.append(value ** 2)
-    new_matrix.append(new_row)
-
-  return new_matrix
+    return (new_matrix)
