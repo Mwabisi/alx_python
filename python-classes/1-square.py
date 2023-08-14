@@ -1,9 +1,18 @@
-#!/user/bin/phython3
-class Square:
-    def __init__(self, size):
-        self.size = size
+#!/usr/bin/python3
 
-        square = Square(3)
-        print(Square.__dict__)
-        print(square._Square__size) # type: ignore
-        print(square.size)
+"""Define a class Square."""
+
+
+class Square:
+    """Represent a square."""
+
+    def __init__(self, size=0):
+        """Initialize a new Square.
+        Args:
+            size (int): The size of the new square.
+        """
+        if not isinstance(size, int):
+            raise TypeError("size must be an integer")
+        elif size < 0:
+            raise ValueError("size must be >= 0")
+        self.__size = size
