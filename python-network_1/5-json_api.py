@@ -3,7 +3,7 @@
 a Python script that takes in a letter and sends a POST request to
 http://0.0.0.0:5000/search_user with the letter as a parameter.
 """
-import requests
+import urllib.request
 from sys import argv
 
 if __name__ == '__main__':
@@ -14,7 +14,7 @@ if __name__ == '__main__':
         q = ""
 
     payload = {'q': q}
-    res = requests.post(url, data=payload)
+    res = urllib.request.post(url, data=payload)
     try:
         data = res.json()
         if data:
