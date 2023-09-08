@@ -10,4 +10,4 @@ if response.status_code == 200:
     print("Body response:")
     print("\t- content:", content)
 else:
-    print(f"Error: Unable to fetch the URL. Status code: {response.status_code}")
+    print(f"Error: Unable to fetch the URL. Status code: {response.status_code}") 
