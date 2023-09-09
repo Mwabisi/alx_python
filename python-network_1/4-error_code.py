@@ -1,15 +1,22 @@
 #!/usr/bin/python3
-"""sends a request to the URL
-   displays the body of the response (decoded in utf-8)"""
-import urllib.error as error
-import urllib.request as request
-from sys import argv
-
+"""
+a Python script that takes in a URL,
+sends a request to the URL and displays the
+body of the response.
+"""
+import requests
+import sys
 
 if __name__ == "__main__":
-    req = request.Request(argv[1])
     try:
-        with request.urlopen(req) as r:
-            print(r.read().decode('utf-8'))
-    except error.HTTPError as e:
-        print("Error code: {}".format(e.code))
+        url = sys.argv[1]
+        response = requests.get(url)
+        print("Response body:")
+        print(response.text)
+
+        if response.status_code >= 400:
+            print(f"Error code: {response.status_code}")
+    except IndexError:
+        print("Usage: python script.py <URL>")
+    except requests.exceptions.RequestException as e:
+        print(f"An error occurred: {e}")

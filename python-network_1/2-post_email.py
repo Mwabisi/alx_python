@@ -3,16 +3,21 @@
 Usage: ./2-post_email.py <URL> <email>
   - Displays the body of the response.
 """
+import requests
 import sys
-import urllib.parse
-import urllib.request
 
+if len(sys.argv) != 3:
+    print("Usage: python script.py <URL> <email>")
+    sys.exit(1)
 
-if __name__ == "__main__":
-    url = sys.argv[1]
-    value = {"email": sys.argv[2]}
-    data = urllib.parse.urlencode(value).encode("ascii")
+url, email = sys.argv[1], sys.argv[2]
 
-    request = urllib.request.Request(url, data)
-    with urllib.request.urlopen(request) as response:
-        print(response.read().decode("utf-8"))
+try:
+    response = requests.post(url, data={'email': email})
+    if response.status_code == 200:
+        print("Response body:")
+        print(response.text)
+    else:
+        print(f"Error: HTTP status code {response.status_code}")
+except requests.exceptions.RequestException as e:
+    print(f"An error occurred: {e}")
