@@ -12,6 +12,7 @@ url = sys.argv[1]
 
 try:
     response = requests.get(url)
-    print(response.headers.get('X-Request-Id', 'X-Request-Id header not found'))
+    request_id = response.headers.get('X-Request-Id', 'X-Request-Id header not found')
+    print(request_id)
 except requests.exceptions.RequestException as e:
     print(f"An error occurred: {e}") 
