@@ -14,4 +14,4 @@ try:
     response = requests.get(url)
     print(response.headers.get('X-Request-Id', 'X-Request-Id header not found'))
 except requests.exceptions.RequestException as e:
-    print(f"An error occurred: {e}")
+    print(f"An error occurred: {e}") 
