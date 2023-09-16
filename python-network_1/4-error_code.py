@@ -19,4 +19,4 @@ if __name__ == "__main__":
     except IndexError:
         print("Usage: python script.py <URL>")
     except requests.exceptions.RequestException as e:
-        print(f"An error occurred: {e}")
+        print(f"An error occurred: {e}") 
