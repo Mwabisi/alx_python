@@ -15,7 +15,6 @@ url, email = sys.argv[1], sys.argv[2]
 try:
     response = requests.post(url, data={'email': email})
     if response.status_code == 200:
-        print("Response body:")
         print(response.text)
     else:
         print(f"Error: HTTP status code {response.status_code}")
