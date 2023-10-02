@@ -33,14 +33,13 @@ def main():
     employee_data, todo_data = fetch_employee_data(employee_id)
 
     employee_name = employee_data.get("name")
-    completed_tasks = [task["title"] for task in todo_data if task["completed"]]
+    completed_tasks = [task for task in todo_data if task["completed"]]
     total_tasks = len(todo_data)
 
     print(f"Employee {employee_name} is done with tasks({len(completed_tasks)}/{total_tasks}):")
     
     for task in completed_tasks:
-        print(f"\t{task}")
+        print(f"    {task['title']}")
 
 if __name__ == "__main__":
     main()
-    
