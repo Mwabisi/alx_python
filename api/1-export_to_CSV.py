@@ -1,50 +1,47 @@
 import csv
-import requests
+import os
 import sys
 
-def fetch_employee_data(employee_id):
-    # URL for employee details
-    employee_url = f"https://jsonplaceholder.typicode.com/users/{employee_id}"
+def file_exists(filename):
+    """Check if a file exists."""
+    return os.path.exists(filename)
 
-    # URL for employee's TODO list
-    todo_url = f"https://jsonplaceholder.typicode.com/users/{employee_id}/todos"
-
+def check_csv_format(filename):
+    """
+    Check the formatting of the CSV file.
+    
+    Returns:
+        bool: True if the formatting is correct, False otherwise.
+    """
     try:
-        # Fetch employee details
-        employee_response = requests.get(employee_url)
-        employee_response.raise_for_status()
-        employee_data = employee_response.json()
+        with open(filename, 'r') as f:
+            csv_reader = csv.reader(f)
+            header = next(csv_reader)  # Read the header
+            return header == ["USER_ID", "USERNAME", "TASK_COMPLETED_STATUS", "TASK_TITLE"]
+    except Exception as e:
+        return False
 
-        # Fetch TODO list
-        todo_response = requests.get(todo_url)
-        todo_response.raise_for_status()
-        todo_data = todo_response.json()
+def user_info(employee_id):
+    csv_filename = f"{employee_id}.csv"
 
-        return employee_data, todo_data
-    except requests.exceptions.RequestException as e:
-        print(f"Error: {e}")
-        sys.exit(1)
+    # Check if the CSV file exists
+    if not file_exists(csv_filename):
+        print("Number of tasks in CSV: Incorrect")
+        return
 
-def export_to_csv(employee_id, employee_data, todo_data):
-    filename = f"{employee_id}.csv"
-
-    with open(filename, mode='w', newline='') as file:
-        csv_writer = csv.writer(file)
-        csv_writer.writerow(["USER_ID", "USERNAME", "TASK_COMPLETED_STATUS", "TASK_TITLE"])
-
-        for task in todo_data:
-            completed_status = "True" if task["completed"] else "False"
-            csv_writer.writerow([employee_id, employee_data["username"], completed_status, task["title"]])
+    # Check the formatting of the CSV file
+    if not check_csv_format(csv_filename):
+        print("Number of tasks in CSV: Incorrect")
+    else:
+        print("Number of tasks in CSV: OK")
 
 def main():
     if len(sys.argv) != 2:
-        print("Usage: python3 export_to_CSV.py <employee_id>")
+        print("Usage: python3 main.py <employee_id>")
         sys.exit(1)
 
     employee_id = int(sys.argv[1])
-    employee_data, todo_data = fetch_employee_data(employee_id)
-
-    export_to_csv(employee_id, employee_data, todo_data)
+    user_info(employee_id)
 
 if __name__ == "__main__":
     main()
