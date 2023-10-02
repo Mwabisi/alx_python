@@ -1,6 +1,7 @@
 import requests
 import sys
 
+
 def fetch_employee_data(employee_id):
     # Define the API endpoints
     user_url = f"https://jsonplaceholder.typicode.com/users/{employee_id}"
@@ -10,7 +11,7 @@ def fetch_employee_data(employee_id):
         # Fetch user data
         user_response = requests.get(user_url)
         user_data = user_response.json()
-        
+
         # Fetch TODO list data
         todos_response = requests.get(todos_url)
         todos_data = todos_response.json()
@@ -22,12 +23,14 @@ def fetch_employee_data(employee_id):
 
         # Display employee TODO list progress with the correct formatting
         print(f"{user_data['name']} is done with {num_completed_tasks}/{total_num_tasks} tasks:")
-        for task in completed_tasks:
-            print(f"\t{task['title']}")
+        for task in todos_data:
+            task_status = "✓" if task["completed"] else "✗"
+            print(f"\t{task_status} {task['title']}")
 
     except requests.exceptions.RequestException as e:
         print("Error: Unable to fetch data from the API.")
         print(e)
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
@@ -35,3 +38,4 @@ if __name__ == "__main__":
     else:
         employee_id = int(sys.argv[1])
         fetch_employee_data(employee_id)
+
