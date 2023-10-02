@@ -1,45 +1,27 @@
 import requests
 import sys
 
-def fetch_employee_data(employee_id):
-    # URL for employee details
-    employee_url = f"https://jsonplaceholder.typicode.com/users/{employee_id}"
+users_url = "https://jsonplaceholder.typicode.com/users"
+todos_url = "https://jsonplaceholder.typicode.com/todos"
 
-    # URL for employee's TODO list
-    todo_url = f"https://jsonplaceholder.typicode.com/users/{employee_id}/todos"
 
-    try:
-        # Fetch employee details
-        employee_response = requests.get(employee_url)
-        employee_response.raise_for_status()
-        employee_data = employee_response.json()
+def check_tasks(id):
+    """ Fetch user name, number of tasks """
 
-        # Fetch TODO list
-        todo_response = requests.get(todo_url)
-        todo_response.raise_for_status()
-        todo_data = todo_response.json()
+    resp = requests.get(todos_url).json()
 
-        return employee_data, todo_data
-    except requests.exceptions.RequestException as e:
-        print(f"Error: {e}")
-        sys.exit(1)
+    filename = 'student_output'
+    count = 0
+    with open(filename, 'r') as f:
+        next(f)
+        for line in f:
+            count += 1
+            # Check if the line starts with four spaces
+            if line.startswith(" " * 4):
+                print(f"Task {count} Formatting: OK")
+            else:
+                print(f"Task {count} Formatting: Incorrect")
 
-def main():
-    if len(sys.argv) != 2:
-        print("Usage: python3 gather_data_from_an_API.py <employee_id>")
-        sys.exit(1)
-
-    employee_id = int(sys.argv[1])
-    employee_data, todo_data = fetch_employee_data(employee_id)
-
-    employee_name = employee_data.get("name")
-    completed_tasks = [task for task in todo_data if task["completed"]]
-    total_tasks = len(todo_data)
-
-    print(f"Employee {employee_name} is done with tasks({len(completed_tasks)}/{total_tasks}):")
-    
-    for task in completed_tasks:
-        print(f"    {task['title']}")
 
 if __name__ == "__main__":
-    main()
+    check_tasks(int(sys.argv[1]))
