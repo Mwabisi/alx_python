@@ -1,52 +1,60 @@
 import requests
-import sys
 
-def fetch_employee_data(employee_id):
-    """
-    Fetch employee data and TODO list for a given employee ID.
+def get_employee_todo_list_progress(employee_id):
+  """Returns information about the employee's TODO list progress.
 
-    Args:
-        employee_id (int): The employee's ID.
+  Args:
+    employee_id: The ID of the employee.
 
-    Returns:
-        tuple: A tuple containing employee data dictionary and TODO list.
-    """
-    employee_url = f"https://jsonplaceholder.typicode.com/users/{employee_id}"
-    todo_url = f"https://jsonplaceholder.typicode.com/users/{employee_id}/todos"
+  Returns:
+    A string containing the employee's TODO list progress in the format:
 
-    try:
-        employee_response = requests.get(employee_url)
-        employee_response.raise_for_status()
-        employee_data = employee_response.json()
+    Employee EMPLOYEE_NAME is done with tasks(NUMBER_OF_DONE_TASKS/TOTAL_NUMBER_OF_TASKS):
+    TASK_TITLE
 
-        todo_response = requests.get(todo_url)
-        todo_response.raise_for_status()
-        todo_data = todo_response.json()
+    where:
+    EMPLOYEE_NAME: name of the employee
+    NUMBER_OF_DONE_TASKS: number of completed tasks
+    TOTAL_NUMBER_OF_TASKS: total number of tasks, which is the sum of completed and non-completed tasks
+    TASK_TITLE: title of the completed task
+  """
 
-        return employee_data, todo_data
-    except requests.exceptions.RequestException as e:
-        print(f"Error: {e}")
-        sys.exit(1)
+  # Get the employee's TODO list items.
+  response = requests.get(f"https://jsonplaceholder.typicode.com/users/{employee_id}/todos")
+  todo_list_items = response.json()
 
-def main():
-    """
-    Main function to display employee's TODO list progress.
-    """
-    if len(sys.argv) != 2:
-        print("Usage: python3 gather_data_from_an_API.py <employee_id>")
-        sys.exit(1)
+  # Get the employee's name.
+  response = requests.get(f"https://jsonplaceholder.typicode.com/users/{employee_id}")
+  employee = response.json()
+  employee_name = employee["name"]
 
-    employee_id = int(sys.argv[1])
-    employee_data, todo_data = fetch_employee_data(employee_id)
+  # Calculate the number of completed and non-completed tasks.
+  number_of_done_tasks = 0
+  number_of_non_completed_tasks = 0
+  for todo_list_item in todo_list_items:
+    if todo_list_item["completed"]:
+      number_of_done_tasks += 1
+    else:
+      number_of_non_completed_tasks += 1
 
-    employee_name = employee_data.get("name")
-    completed_tasks = [task["title"] for task in todo_data if task["completed"]]
-    total_tasks = len(todo_data)
+  # Calculate the total number of tasks.
+  total_number_of_tasks = number_of_done_tasks + number_of_non_completed_tasks
 
-    print(f"Employee {employee_name} is done with tasks({len(completed_tasks)}/{total_tasks}):")
-    
-    for task in completed_tasks:
-        print(f"    {task}")
+  # Generate the output string.
+  output_string = f"Employee {employee_name} is done with tasks({number_of_done_tasks}/{total_number_of_tasks}):\n"
+  for todo_list_item in todo_list_items:
+    if todo_list_item["completed"]:
+      output_string += f"  {todo_list_item['title']}\n"
+
+  return output_string
+
 
 if __name__ == "__main__":
-    main()
+  # Get the employee ID from the user.
+  employee_id = int(input("Enter the employee ID: "))
+
+  # Get the employee's TODO list progress.
+  employee_todo_list_progress = get_employee_todo_list_progress(employee_id)
+
+  # Print the employee's TODO list progress to the console.
+  print(employee_todo_list_progress)
