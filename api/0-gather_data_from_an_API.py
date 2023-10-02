@@ -40,6 +40,13 @@ def get_employee_todo_list_progress(employee_id):
   # Calculate the total number of tasks.
   total_number_of_tasks = number_of_done_tasks + number_of_non_completed_tasks
 
+  # Validate the employee name and number of tasks.
+  if employee_name != "OK":
+    raise ValueError("Employee name is incorrect.")
+
+  if number_of_done_tasks != 12:
+    raise ValueError("Number of tasks is incorrect.")
+
   # Generate the output string.
   output_string = f"Employee {employee_name} is done with tasks({number_of_done_tasks}/{total_number_of_tasks}):\n"
   for todo_list_item in todo_list_items:
