@@ -1,4 +1,3 @@
-import json
 import requests
 
 def get_employee_todo_list_progress(employee_id):
@@ -19,19 +18,19 @@ def get_employee_todo_list_progress(employee_id):
   # Get the employee's TODO list items.
   todo_list_items_endpoint = f"https://jsonplaceholder.typicode.com/users/{employee_id}/todos"
   todo_list_items_response = requests.get(todo_list_items_endpoint)
-  todo_list_items = json.loads(todo_list_items_response.content)
+  todo_list_items = todo_list_items_response.json()
 
   # Get the employee's name.
   employee_details_endpoint = f"https://jsonplaceholder.typicode.com/users/{employee_id}"
   employee_details_response = requests.get(employee_details_endpoint)
-  employee_details = json.loads(employee_details_response.content)
-  employee_name = employee_details["name"]
+  employee_details = employee_details_response.json()
+  employee_name = employee_details.get("name")
 
   # Calculate the number of completed and non-completed tasks.
   number_of_done_tasks = 0
   number_of_non_completed_tasks = 0
   for todo_list_item in todo_list_items:
-    if todo_list_item["completed"]:
+    if todo_list_item.get("completed"):
       number_of_done_tasks += 1
     else:
       number_of_non_completed_tasks += 1
@@ -42,8 +41,8 @@ def get_employee_todo_list_progress(employee_id):
   # Get the titles of the completed tasks.
   completed_tasks = []
   for todo_list_item in todo_list_items:
-    if todo_list_item["completed"]:
-      completed_tasks.append(todo_list_item["title"])
+    if todo_list_item.get("completed"):
+      completed_tasks.append(f"Task {todo_list_item.get('id')}: {todo_list_item.get('title')}")
 
   # Return a dictionary containing the employee's TODO list progress.
   return {
