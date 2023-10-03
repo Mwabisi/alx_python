@@ -1,6 +1,7 @@
+import csv
 import requests
 import sys
-import csv
+
 
 def fetch_employee_data(employee_id):
     # Define the API endpoints
