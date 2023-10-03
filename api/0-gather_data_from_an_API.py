@@ -23,7 +23,11 @@ def fetch_employee_data(employee_id):
         # Display employee TODO list progress
         print(f"Employee {user_data['name']} is done with tasks({num_completed_tasks}/{total_num_tasks}):")
         for task in completed_tasks:
-            print(f"\t{task['title']}")
+            # Check task formatting
+            if task['title'].strip().endswith('.'):
+                print(f"\t{task['title']}")
+            else:
+                print(f"\t{task['title']}.")  # Add a period at the end if it's missing
 
     except requests.exceptions.RequestException as e:
         print("Error: Unable to fetch data from the API.")
