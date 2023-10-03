@@ -1,7 +1,6 @@
-import csv
 import requests
 import sys
-import os  # Import the os module to check if the file exists
+import csv
 
 def fetch_employee_data(employee_id):
     # Define the API endpoints
@@ -21,31 +20,13 @@ def fetch_employee_data(employee_id):
         csv_filename = f"{user_data['id']}.csv"
         with open(csv_filename, mode='w', newline='') as csv_file:
             csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            # Write the header row
             csv_writer.writerow(["USER_ID", "USERNAME", "TASK_COMPLETED_STATUS", "TASK_TITLE"])
+            # Write task records
             for task in todos_data:
-                csv_writer.writerow([user_data['id'], user_data['name'], task['completed'], task['title']])
+                csv_writer.writerow([user_data['id'], user_data['username'], task['completed'], task['title']])
 
         print(f"Data has been exported to {csv_filename}.")
-
-        # Now, perform the checks after creating the CSV file
-        if os.path.isfile(csv_filename):
-            # Check number of tasks in CSV
-            with open(csv_filename, 'r') as f:
-                num_tasks = sum(1 for _ in f) - 1  # Subtract 1 for the header row
-                print(f"Number of tasks in CSV: {num_tasks} (excluding header)")
-
-            # Check user ID and username
-            if user_data['id'] == int(csv_filename.split('.')[0]) and user_data['name'] in open(csv_filename).read():
-                print("User ID and Username: OK")
-
-            # Check formatting
-            with open(csv_filename, 'r') as f:
-                for line in f.readlines():
-                    if not line.strip().endswith('"'):
-                        print("Formatting: Incorrect")
-                        break
-                else:
-                    print("Formatting: OK")
 
     except requests.exceptions.RequestException as e:
         print("Error: Unable to fetch data from the API.")
