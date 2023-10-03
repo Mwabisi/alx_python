@@ -2,8 +2,16 @@ import json
 import requests
 import sys
 
-# Function to fetch user information and todo list for a given employee ID
 def user_info(employee_id):
+    """
+    Fetches user information and their TODO list for a given employee ID and exports it to a JSON file.
+
+    Args:
+        employee_id (int): The ID of the employee for whom to fetch data.
+
+    Returns:
+        None
+    """
     # API endpoint URLs
     user_url = f"https://jsonplaceholder.typicode.com/users/{employee_id}"
     todo_url = f"https://jsonplaceholder.typicode.com/users/{employee_id}/todos"
