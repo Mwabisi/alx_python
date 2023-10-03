@@ -8,6 +8,7 @@ def fetch_employee_data(employee_id):
     todos_url = f"https://jsonplaceholder.typicode.com/users/{employee_id}/todos"
 
     try:
+        # Fetch user data
         user_response = requests.get(user_url)
         user_data = user_response.json()
 
