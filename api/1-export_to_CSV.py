@@ -1,47 +1,46 @@
+import requests
 import csv
-import os
 import sys
 
-def file_exists(filename):
-    """Check if a file exists."""
-    return os.path.exists(filename)
+def fetch_employee_data(employee_id):
+    # Define the API endpoints
+    user_url = f"https://jsonplaceholder.typicode.com/users/{employee_id}"
+    todos_url = f"https://jsonplaceholder.typicode.com/users/{employee_id}/todos"
 
-def check_csv_format(filename):
-    """
-    Check the formatting of the CSV file.
-    
-    Returns:
-        bool: True if the formatting is correct, False otherwise.
-    """
     try:
-        with open(filename, 'r') as f:
-            csv_reader = csv.reader(f)
-            header = next(csv_reader)  # Read the header
-            return header == ["USER_ID", "USERNAME", "TASK_COMPLETED_STATUS", "TASK_TITLE"]
-    except Exception as e:
-        return False
+        # Fetch user data
+        user_response = requests.get(user_url)
+        user_data = user_response.json()
+        
+        # Fetch TODO list data
+        todos_response = requests.get(todos_url)
+        todos_data = todos_response.json()
 
-def user_info(employee_id):
-    csv_filename = f"{employee_id}.csv"
+        # Calculate the number of completed tasks
+        completed_tasks = [task for task in todos_data if task["completed"]]
 
-    # Check if the CSV file exists
-    if not file_exists(csv_filename):
-        print("Number of tasks in CSV: Incorrect")
-        return
+        # Display employee TODO list progress with the correct formatting
+        print(f"{user_data['name']} is done with {len(completed_tasks)}/{len(todos_data)} tasks:")
+        for task in completed_tasks:
+            print(f"\t{task['title']}")
 
-    # Check the formatting of the CSV file
-    if not check_csv_format(csv_filename):
-        print("Number of tasks in CSV: Incorrect")
-    else:
-        print("Number of tasks in CSV: OK")
+        # Export data to CSV file
+        csv_filename = f"{user_data['id']}.csv"
+        with open(csv_filename, mode='w', newline='') as csv_file:
+            csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            csv_writer.writerow(["USER_ID", "USERNAME", "TASK_COMPLETED_STATUS", "TASK_TITLE"])
+            for task in todos_data:
+                csv_writer.writerow([user_data['id'], user_data['name'], str(task['completed']), task['title']])
+        
+        print(f"Data has been exported to {csv_filename}.")
 
-def main():
-    if len(sys.argv) != 2:
-        print("Usage: python3 main.py <employee_id>")
-        sys.exit(1)
-
-    employee_id = int(sys.argv[1])
-    user_info(employee_id)
+    except requests.exceptions.RequestException as e:
+        print("Error: Unable to fetch data from the API.")
+        print(e)
 
 if __name__ == "__main__":
-    main()
+    if len(sys.argv) != 2:
+        print("Usage: python script.py <employee_id>")
+    else:
+        employee_id = int(sys.argv[1])
+        fetch_employee_data(employee_id)
