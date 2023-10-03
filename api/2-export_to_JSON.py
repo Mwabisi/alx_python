@@ -10,21 +10,25 @@ def user_info(employee_id):
     # Fetch user data from the API
     response_user = requests.get(user_url)
     user_data = response_user.json()
+    username = user_data["username"]
 
     # Fetch todo data from the API
     response_todo = requests.get(todo_url)
     todo_data = response_todo.json()
 
-    # Create a dictionary to store user and task data
+    # Create a list of tasks with the required format
+    tasks = [
+        {
+            "task": task["title"],
+            "completed": task["completed"],
+            "username": username
+        }
+        for task in todo_data
+    ]
+
+    # Create a dictionary with the user ID as the key and tasks list as the value
     user_info_dict = {
-        str(employee_id): [
-            {
-                "task": task["title"],
-                "completed": task["completed"],
-                "username": user_data["username"]
-            }
-            for task in todo_data
-        ]
+        str(employee_id): tasks
     }
 
     # Export data to JSON file
