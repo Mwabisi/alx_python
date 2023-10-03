@@ -2,6 +2,7 @@ import json
 import requests
 import sys
 
+# Function to fetch user information and todo list for a given employee ID
 def user_info(employee_id):
     # API endpoint URLs
     user_url = f"https://jsonplaceholder.typicode.com/users/{employee_id}"
@@ -35,9 +36,6 @@ def user_info(employee_id):
     json_filename = f"{employee_id}.json"
     with open(json_filename, 'w') as json_file:
         json.dump(user_info_dict, json_file, indent=4)
-
-    # Print the JSON data (optional)
-    print(json.dumps(user_info_dict, indent=4))
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
