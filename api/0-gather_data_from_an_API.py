@@ -1,37 +1,46 @@
-import requests
+"""
+This module gathers and prints information about the task completion status of an employee.
+The employee data is obtained from an API endpoint.
+"""
 
-def get_todo_progress(employee_id):
+import requests
+import sys
+
+def get_employee_data(employee_id):
     """
-    Get and print the TODO list progress for a given employee ID.
+    Fetches data about the employee and their tasks from an API.
 
     Args:
-        employee_id (int): The ID of the employee.
+    employee_id (int): The ID of the employee.
+
+    Returns:
+    dict: The information about the employee.
+    dict: The tasks of the employee.
     """
+    
+    user_info = requests.get(f'https://jsonplaceholder.typicode.com/users/{employee_id}').json()
+    todos = requests.get(f'https://jsonplaceholder.typicode.com/users/{employee_id}/todos').json()
+    
+    return user_info, todos
 
-    # Send a GET request to the REST API to fetch the TODO list for the given employee ID.
-    response = requests.get(f"https://jsonplaceholder.typicode.com/users/{employee_id}/todos")
+def print_employee_tasks(user_info, todos):
+    """
+    Prints the completed tasks of an employee.
 
-    # Convert the response to JSON format. This gives us a list of TODO items.
-    todos = response.json()
+    Args:
+    user_info (dict): The information about the employee.
+    todos (dict): The tasks of the employee.
+    """
+    
+    completed_tasks = [task for task in todos if task.get('completed')]
+    
+    print(f"Employee {user_info.get('name')} is done with tasks({len(completed_tasks)}/{len(todos)}):")
+    for task in completed_tasks:
+        print(f"\t{task.get('title')}")
 
-    # Count the number of completed TODO items by summing up the 'completed' field of each TODO item.
-    completed_count = sum(todo['completed'] for todo in todos)
-
-    # Get the total number of TODO items.
-    total_count = len(todos)
-
-    # Print the employee ID.
-    print(f"Employee ID: {employee_id}")
-
-    # Print the total number of TODO items.
-    print(f"Total TODOs: {total_count}")
-
-    # Print the number of completed TODO items.
-    print(f"TODOs completed: {completed_count}")
-
-    # Calculate and print the progress as the percentage of completed TODO items out of the total.
-    print(f"Progress: {completed_count / total_count * 100:.2f}%")
-
-# Call the function with an example employee ID.
-get_todo_progress(1)
-This function accepts an employee ID as an argument, fetches the TODO list for that employee from the REST API, counts the
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Usage: python3 0-gather_data_from_an_API.py <employee_id>")
+    else:
+        user_info, todos = get_employee_data(sys.argv[1])
+        print_employee_tasks(user_info, todos)
