@@ -1,62 +1,37 @@
 import requests
-import sys
 
-def fetch_employee_data(employee_id):
-  """Fetches employee data from the JSONPlaceholder API.
+def get_todo_progress(employee_id):
+    """
+    Get and print the TODO list progress for a given employee ID.
 
-  Args:
-    employee_id: The ID of the employee to fetch data for.
+    Args:
+        employee_id (int): The ID of the employee.
+    """
 
-  Returns:
-    A dictionary containing the employee's data.
-  """
+    # Send a GET request to the REST API to fetch the TODO list for the given employee ID.
+    response = requests.get(f"https://jsonplaceholder.typicode.com/users/{employee_id}/todos")
 
-  # Define the API endpoints
-  user_url = f"https://jsonplaceholder.typicode.com/users/{employee_id}"
-  todos_url = f"https://jsonplaceholder.typicode.com/users/{employee_id}/todos"
+    # Convert the response to JSON format. This gives us a list of TODO items.
+    todos = response.json()
 
-  try:
-    # Fetch user data
-    user_response = requests.get(user_url)
-    user_data = user_response.json()
+    # Count the number of completed TODO items by summing up the 'completed' field of each TODO item.
+    completed_count = sum(todo['completed'] for todo in todos)
 
-    # Fetch TODO list data
-    todos_response = requests.get(todos_url)
-    todos_data = todos_response.json()
+    # Get the total number of TODO items.
+    total_count = len(todos)
 
-    return user_data, todos_data
+    # Print the employee ID.
+    print(f"Employee ID: {employee_id}")
 
-  except requests.exceptions.RequestException as e:
-    print("Error: Unable to fetch data from the API.")
-    print(e)
+    # Print the total number of TODO items.
+    print(f"Total TODOs: {total_count}")
 
-def display_employee_TODO_list_progress(user_data, todos_data):
-  """Displays the employee's TODO list progress.
+    # Print the number of completed TODO items.
+    print(f"TODOs completed: {completed_count}")
 
-  Args:
-    user_data: A dictionary containing the employee's data.
-    todos_data: A list of dictionaries containing the employee's TODO list items.
-  """
+    # Calculate and print the progress as the percentage of completed TODO items out of the total.
+    print(f"Progress: {completed_count / total_count * 100:.2f}%")
 
-  # Calculate the number of completed tasks
-  completed_tasks = [task for task in todos_data if task["completed"]]
-  num_completed_tasks = len(completed_tasks)
-  total_num_tasks = len(todos_data)
-
-  # Display employee TODO list progress
-  print(f"Employee {user_data['name']} is done with tasks({num_completed_tasks}/{total_num_tasks}):")
-  for task in completed_tasks:
-    # Check task formatting
-    if not task["title"].strip().endswith('.'):
-      task["title"] += '.'
-
-    print(f"\t{task['title']}")
-
-if __name__ == "__main__":
-  if len(sys.argv) != 2:
-    print("Usage: python script.py <employee_id>")
-  else:
-    employee_id = int(sys.argv[1])
-
-    user_data, todos_data = fetch_employee_data(employee_id)
-    display_employee_TODO_list_progress(user_data, todos_data)
+# Call the function with an example employee ID.
+get_todo_progress(1)
+This function accepts an employee ID as an argument, fetches the TODO list for that employee from the REST API, counts the
