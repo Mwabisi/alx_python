@@ -3,9 +3,9 @@ This module gathers and prints information about the task completion status of a
 The employee data is obtained from an API endpoint.
 """
 
+import csv
 import requests
 import sys
-import csv
 
 def get_employee_data(employee_id):
     """
@@ -35,7 +35,7 @@ def write_to_csv(user_info, todos):
     
     filename = f"{user_info.get('id')}.csv"
     with open(filename, 'w', newline='') as csvfile:
-        taskwriter = csv.writer(csvfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        taskwriter = csv.writer(csvfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
         taskwriter.writerow(["USER_ID", "USERNAME", "TASK_COMPLETED_STATUS", "TASK_TITLE"])
         for task in todos:
             taskwriter.writerow([user_info.get('id'), user_info.get('username'), task.get('completed'), task.get('title')])
