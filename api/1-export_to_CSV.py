@@ -1,8 +1,3 @@
-"""
-This module gathers and prints information about the task completion status of an employee.
-The employee data is obtained from an API endpoint.
-"""
-
 import csv
 import requests
 import sys
@@ -24,25 +19,34 @@ def get_employee_data(employee_id):
     
     return user_info, todos
 
-def write_to_csv(user_info, todos):
+def export_to_csv(user_info, todos):
     """
-    Writes the tasks of an employee to a CSV file.
+    Exports the completed tasks of an employee to a CSV file.
 
     Args:
     user_info (dict): The information about the employee.
     todos (dict): The tasks of the employee.
     """
+    employee_id = user_info.get('id')
+    file_name = f'{employee_id}.csv'
     
-    filename = f"{user_info.get('id')}.csv"
-    with open(filename, 'w', newline='') as csvfile:
-        taskwriter = csv.writer(csvfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
-        taskwriter.writerow(["USER_ID", "USERNAME", "TASK_COMPLETED_STATUS", "TASK_TITLE"])
+    with open(file_name, 'w', newline='') as csvfile:
+        fieldnames = ['USER_ID', 'USERNAME', 'TASK_COMPLETED_STATUS', 'TASK_TITLE']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        
+        writer.writeheader()
         for task in todos:
-            taskwriter.writerow([user_info.get('id'), user_info.get('username'), task.get('completed'), task.get('title')])
+            writer.writerow({
+                'USER_ID': employee_id,
+                'USERNAME': user_info.get('username'),
+                'TASK_COMPLETED_STATUS': task.get('completed'),
+                'TASK_TITLE': task.get('title')
+            })
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print("Usage: python3 1-export_to_CSV.py <employee_id>")
+        print("Usage: python3 0-gather_data_from_an_API.py <employee_id>")
     else:
         user_info, todos = get_employee_data(sys.argv[1])
-        write_to_csv(user_info, todos)
+        export_to_csv(user_info, todos)
+        print("Data exported to CSV file.")
