@@ -4,7 +4,7 @@ The employee data is obtained from an API endpoint.
 """
 
 import json
-import requests 
+import requests
 
 def get_all_users():
     """
