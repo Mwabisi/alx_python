@@ -2,7 +2,18 @@ class BaseGeometry:
     """
     This is an empty class named BaseGeometry.
     """
-    pass
+
+    def __init__(self):
+        pass
+
+    def __str__(self):
+        pass
+
+    def __repr__(self):
+        pass
+
+    def __sizeof__(self):
+        pass
 
 base_geometry = BaseGeometry()
 
