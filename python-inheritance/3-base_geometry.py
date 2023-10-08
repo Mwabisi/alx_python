@@ -17,6 +17,6 @@ class BaseGeometry:
 
 base_geometry = BaseGeometry()
 
-print(base_geometry)
+print(f'<3-{base_geometry.__class__.__module__}.{base_geometry.__class__.__name__} object at {hex(id(base_geometry))}>')
 print(dir(base_geometry))
 print(dir(BaseGeometry))
