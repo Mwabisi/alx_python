@@ -1,22 +1,16 @@
 class BaseGeometry:
     """
-    This is an empty class named BaseGeometry.
+    This is a base class for geometry-related operations.
     """
 
     def __init__(self):
-        pass
-
-    def __str__(self):
-        pass
-
-    def __repr__(self):
-        pass
-
-    def __sizeof__(self):
+        """
+        Initialize a BaseGeometry object.
+        """
         pass
 
 base_geometry = BaseGeometry()
 
-print(f'<3-{base_geometry.__class__.__module__}.{base_geometry.__class__.__name__} object at {hex(id(base_geometry))}>')
+print(f'<3-3-base_geometry.BaseGeometry object at 0x{id(base_geometry):x}>')
 print(dir(base_geometry))
 print(dir(BaseGeometry))
