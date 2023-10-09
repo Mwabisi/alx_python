@@ -1,45 +1,45 @@
 import MySQLdb
+import sys
 
-def list_states_with_name_starting_with_n(username, password, database_name):
-  """
-  Lists all states with a name starting with N (upper N) from the database hbtn_0e_0_usa.
+def list_states_with_n(username, password, database_name):
+    try:
+        # Connect to the MySQL server
+        db = MySQLdb.connect(
+            host="localhost",
+            port=3306,
+            user=username,
+            passwd=password,
+            db=database_name
+        )
 
-  Args:
-    username: The MySQL username.
-    password: The MySQL password.
-    database_name: The database name.
+        # Create a cursor object to interact with the database
+        cursor = db.cursor()
 
-  Returns:
-    A list of states with a name starting with N (upper N), sorted in ascending order by states.id.
-  """
+        # Execute the SQL query to select states with names starting with 'N'
+        cursor.execute("SELECT * FROM states WHERE name LIKE 'N%' ORDER BY id ASC")
 
-  # Connect to the MySQL server.
-  db = MySQLdb.connect(host="localhost", port=3306, user=username, passwd=password, db=database_name)
+        # Fetch all the matching rows
+        rows = cursor.fetchall()
 
-  # Create a cursor.
-  cursor = db.cursor()
+        # Display the results
+        for row in rows:
+            print(row)
 
-  # Execute the SQL query to list all states with a name starting with N (upper N).
-  cursor.execute("SELECT * FROM states WHERE name LIKE 'N%' ORDER BY id ASC")
+        # Close the cursor and the database connection
+        cursor.close()
+        db.close()
 
-  # Get the results.
-  results = cursor.fetchall()
+    except MySQLdb.Error as e:
+        print("MySQL Error:", e)
+        sys.exit(1)
 
-  # Close the cursor and the database connection.
-  cursor.close()
-  db.close()
+if __name__ == "__main__":
+    if len(sys.argv) != 4:
+        print("Usage: python script.py <username> <password> <database_name>")
+        sys.exit(1)
 
-  return results
+    username = sys.argv[1]
+    password = sys.argv[2]
+    database_name = sys.argv[3]
 
-# Get the MySQL username, password, and database name from the user.
-username = input("Enter the MySQL username: ")
-password = input("Enter the MySQL password: ")
-database_name = input("Enter the database name: ")
-
-# List all states with a name starting with N (upper N).
-states = list_states_with_name_starting_with_n(username, password, database_name)
-
-# Print the results.
-print("List of states with a name starting with N:")
-for state in states:
-  print(state[1])
+    list_states_with_n(username, password, database_name)
