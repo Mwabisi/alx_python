@@ -2,6 +2,18 @@ import MySQLdb
 import sys
 
 def search_states_by_name(username, password, database_name, search_name):
+    """
+    Search for states by name in the states table of a MySQL database.
+
+    Args:
+        username (str): MySQL username.
+        password (str): MySQL password.
+        database_name (str): Name of the MySQL database.
+        search_name (str): State name to search for.
+
+    Returns:
+        None
+    """
     try:
         # Connect to the MySQL server
         db = MySQLdb.connect(
