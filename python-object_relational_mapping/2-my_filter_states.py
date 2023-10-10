@@ -15,11 +15,8 @@ def search_states(username, password, database_name, search_name):
         # Create a cursor object to interact with the database
         cursor = db.cursor()
 
-        # Prepare the SQL query with user input using format
-        query = "SELECT * FROM states WHERE name = %s ORDER BY id ASC"
-        query = query.format(search_name)
-
-        # Execute the SQL query
+        # Prepare the SQL query with user input using format and make it case-sensitive with BINARY
+        query = "SELECT * FROM states WHERE BINARY name = %s ORDER BY id ASC"
         cursor.execute(query, (search_name,))
 
         # Fetch all the matching rows
