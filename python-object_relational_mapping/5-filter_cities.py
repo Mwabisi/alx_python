@@ -12,7 +12,6 @@ def list_cities_by_state(username, password, database_name, state_name):
             db=database_name
         )
 
-        # Create a cursor object to interact with the database
         cursor = db.cursor()
 
         # Prepare the SQL query with parameterized query to avoid SQL injection
@@ -26,12 +25,14 @@ def list_cities_by_state(username, password, database_name, state_name):
 
         cursor.execute(query, (state_name,))
 
-        # Fetch all the rows
         rows = cursor.fetchall()
 
-        # Display the results
-        for row in rows:
-            print(row)
+        # Extract city names and join them into a comma-separated string
+        cities_list = [row[1] for row in rows]
+        cities_str = ', '.join(cities_list)
+
+        # Display the results as a comma-separated string
+        print(cities_str)
 
         # Close the cursor and the database connection
         cursor.close()
