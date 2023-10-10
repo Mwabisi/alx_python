@@ -3,6 +3,7 @@ import sys
 
 def list_cities(username, password, database_name):
     try:
+        # Connect to the MySQL server
         db = MySQLdb.connect(
             host="localhost",
             port=3306,
@@ -14,10 +15,17 @@ def list_cities(username, password, database_name):
         # Create a cursor object to interact with the database
         cursor = db.cursor()
 
-        # Execute the SQL query to select all cities and sort by cities.id in ascending order
-        cursor.execute("SELECT * FROM cities ORDER BY id ASC")
+        # Execute a SQL JOIN query to select city names along with their state names
+        query = """
+        SELECT cities.id, cities.name, states.name
+        FROM cities
+        JOIN states ON cities.state_id = states.id
+        ORDER BY cities.id ASC
+        """
 
-        # Fetch all the rows in one go
+        cursor.execute(query)
+
+        # Fetch all the rows
         rows = cursor.fetchall()
 
         # Display the results
